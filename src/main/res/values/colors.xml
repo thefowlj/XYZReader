@@ -24,5 +24,8 @@
     <color name="theme_primary_dark">#388E3C</color> <!-- Green 700 -->
     <color name="theme_accent">#FF6E40</color> <!-- Deep Orange A200 -->
 
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_700">#616161</color>
+
     <color name="ltgray">#ffe0e0e0</color>
 </resources>

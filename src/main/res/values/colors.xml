@@ -18,8 +18,11 @@
 <resources>
     <color name="photo_placeholder">#ccc</color>
 
-    <color name="theme_primary">#04561A</color>
-    <color name="theme_primary_dark">#04561A</color>
-    <color name="theme_accent">#04561A</color>
+    <!-- The original color scheme used #04561A for all three colors. Changed to
+     something that makes more sense with material design.-->
+    <color name="theme_primary">#4CAF50</color> <!-- Green 500 -->
+    <color name="theme_primary_dark">#388E3C</color> <!-- Green 700 -->
+    <color name="theme_accent">#FF6E40</color> <!-- Deep Orange A200 -->
+
     <color name="ltgray">#ffe0e0e0</color>
 </resources>

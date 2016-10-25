@@ -17,7 +17,7 @@
         <!--suppress AndroidLintContentDescription -->
         <com.example.xyzreader.ui.DynamicHeightNetworkImageView
             android:id="@+id/thumbnail"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/photo_placeholder" />
 
@@ -43,8 +43,7 @@
             android:paddingRight="16dp"
             android:paddingBottom="16dp"
             android:textColor="@color/grey_500"
-            android:maxLines="1"
-            android:singleLine="true"
+            android:maxLines="2"
             android:ellipsize="end" />
     </LinearLayout>
 

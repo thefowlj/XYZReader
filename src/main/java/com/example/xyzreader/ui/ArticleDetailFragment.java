@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -44,10 +44,13 @@ public class ArticleDetailFragment extends Fragment implements
 
     public static final String ARG_ITEM_ID = "item_id";
 
+    private static final int MUTED_COLOR = 0xFF333333;
+    private static final int TRANSPARENT = 0x00;
+    private static final int PALETTE_COLOR_COUNT = 12;
+
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
-    private int mMutedColor = 0xFF333333;
 
     private ImageView mPhotoView;
     private boolean mIsCard = false;
@@ -168,7 +171,7 @@ public class ArticleDetailFragment extends Fragment implements
         //If running SDK 21+ make the status bar transparent
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCoordinatorLayout.setFitsSystemWindows(false);
-            getActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getActivity().getWindow().setStatusBarColor(TRANSPARENT);
             int statusBarHeight = (int) Math.round(
                     Math.ceil(25.0 * getActivity().getResources().getDisplayMetrics().density));
             CollapsingToolbarLayout.LayoutParams layoutParams =
@@ -238,11 +241,20 @@ public class ArticleDetailFragment extends Fragment implements
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                Palette p = Palette.generate(bitmap, 12);
-                                mMutedColor = p.getDarkMutedColor(0xFF333333);
+                                Palette.Builder builder = new Palette.Builder(bitmap);
+                                builder.maximumColorCount(PALETTE_COLOR_COUNT);
+                                Palette p = builder.generate();
+                                int mutedColor = p.getDarkMutedColor(MUTED_COLOR);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
-                                        .setBackgroundColor(mMutedColor);
+                                        .setBackgroundColor(mutedColor);
+
+                                GradientDrawable gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.TOP_BOTTOM,
+                                        new int[] {mutedColor, TRANSPARENT});
+                                gd.setCornerRadius(0);
+
+                                mRootView.findViewById(R.id.photo_gradient).setBackground(gd);
                             }
                         }
 

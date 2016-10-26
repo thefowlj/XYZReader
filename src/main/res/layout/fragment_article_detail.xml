@@ -23,24 +23,30 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"></android.support.v7.widget.Toolbar>
+                app:layout_scrollFlags="scroll|enterAlways" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+
                 <ImageView
                     android:id="@+id/photo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:minHeight="100dp"/>
+
+                <!-- View to create gradient floating on top of article image -->
                 <View
+                    android:id="@+id/photo_gradient"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/actionbar_gradient_dark" />
+
             </FrameLayout>
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>

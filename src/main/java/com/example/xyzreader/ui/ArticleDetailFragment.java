@@ -2,6 +2,7 @@ package com.example.xyzreader.ui;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,6 +12,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -20,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +53,10 @@ public class ArticleDetailFragment extends Fragment implements
     private boolean mIsCard = false;
     private CoordinatorLayout mCoordinatorLayout;
     private Toolbar mToolbar;
+    private NestedScrollView mNestedScrollView;
+    private FloatingActionButton mFAB;
+    private boolean isFABDown = false;
+    private int mBottomBuffer;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -98,12 +107,60 @@ public class ArticleDetailFragment extends Fragment implements
 
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
 
-        mCoordinatorLayout = (CoordinatorLayout) mRootView.findViewById(R.id.detail_coordinator_layout);
+        mCoordinatorLayout =
+                (CoordinatorLayout) mRootView.findViewById(R.id.detail_coordinator_layout);
         mToolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
+
+        mBottomBuffer = Math.round(getResources().getDimension(R.dimen.detail_body_bottom_margin));
+
+        mFAB = (FloatingActionButton) mRootView.findViewById(R.id.share_fab);
+        mFAB.setVisibility(View.GONE);
+        mNestedScrollView =
+                (NestedScrollView) mRootView.findViewById(R.id.detail_nested_scroll_view);
+
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(
+                    NestedScrollView v,
+                    int scrollX,
+                    int scrollY,
+                    int oldScrollX,
+                    int oldScrollY) {
+
+                //The share FAB appears and disappears when approaching the bottom and leaving the
+                //bottom of the screen
+                int bottom = mNestedScrollView.getChildAt(0).getHeight() - mNestedScrollView.getHeight();
+                bottom -= mBottomBuffer;
+                if(scrollY >= bottom && isFABDown) {
+                    fabUp();
+                } else if(scrollY < bottom && !isFABDown) {
+                    fabDown();
+                }
+            }
+        });
+
+        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                        .setType("text/plain")
+                        .setText("Some sample text")
+                        .getIntent(), getString(R.string.action_share)));
+            }
+        });
 
         updateStatusBar();
 
         return mRootView;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //make sure the share FAB is off screen initially
+        if(mFAB != null) {
+            fabDown();
+        }
     }
 
     private void updateStatusBar() {
@@ -119,6 +176,21 @@ public class ArticleDetailFragment extends Fragment implements
             layoutParams.height += statusBarHeight;
             mToolbar.requestLayout();
         }
+    }
+
+    public void fabUp() {
+        mFAB.setVisibility(View.VISIBLE);
+        mFAB.animate().translationY(0).setInterpolator(new LinearInterpolator()).start();
+        isFABDown = false;
+    }
+
+    public void fabDown() {
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mFAB.getLayoutParams();
+        mFAB.animate()
+                .translationY(mFAB.getHeight() + lp.bottomMargin)
+                .setInterpolator(new LinearInterpolator())
+                .start();
+        isFABDown = true;
     }
 
     static float progress(float v, float min, float max) {

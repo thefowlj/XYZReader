@@ -177,10 +177,6 @@ public class ArticleDetailActivity extends ActionBarActivity
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
 
-            System.out.println("mStartId: " + mStartId);
-            System.out.println("position: " + position);
-            System.out.println("mTransitionIndex: " + mTransitionIndex);
-
             return position == mTransitionIndex ?
                     ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID), mTransitionIndex) :
                     ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));

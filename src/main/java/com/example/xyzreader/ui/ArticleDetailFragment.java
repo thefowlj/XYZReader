@@ -275,9 +275,8 @@ public class ArticleDetailFragment extends Fragment implements
                         }
                     });
 
-            mPhotoView.setTransitionName(getString(R.string.transition_photo) + mTransitionIndex);
-
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mPhotoView.setTransitionName(getString(R.string.transition_photo) + mTransitionIndex);
                 scheduleStartPostponedTransition(mPhotoView);
             }
         } else {

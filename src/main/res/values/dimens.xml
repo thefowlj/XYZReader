@@ -9,6 +9,6 @@
     <dimen name="fab_margin">24dp</dimen>
 
     <dimen name="appbar_max_height">112dp</dimen>
-    <dimen name="logo_margins">8dp</dimen>
+    <dimen name="toolbar_margin">8dp</dimen>
 
 </resources>

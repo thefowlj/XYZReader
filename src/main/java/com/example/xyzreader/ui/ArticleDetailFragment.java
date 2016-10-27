@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +63,8 @@ public class ArticleDetailFragment extends Fragment implements
     private boolean isFABDown = false;
     private int mBottomBuffer;
 
+    private int mTransitionIndex;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -69,8 +73,13 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     public static ArticleDetailFragment newInstance(long itemId) {
+        return newInstance(itemId, -1);
+    }
+
+    public static ArticleDetailFragment newInstance(long itemId, int transitionIndex) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_ITEM_ID, itemId);
+        arguments.putInt(ArticleListActivity.TRANSITION_TAG, transitionIndex);
         ArticleDetailFragment fragment = new ArticleDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
@@ -83,6 +92,8 @@ public class ArticleDetailFragment extends Fragment implements
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
+
+        mTransitionIndex = getArguments().getInt(ArticleListActivity.TRANSITION_TAG, -1);
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
         setHasOptionsMenu(true);
@@ -263,6 +274,12 @@ public class ArticleDetailFragment extends Fragment implements
 
                         }
                     });
+
+            mPhotoView.setTransitionName(getString(R.string.transition_photo) + mTransitionIndex);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                scheduleStartPostponedTransition(mPhotoView);
+            }
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
@@ -293,11 +310,25 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
+        //ActivityCompat.startPostponedEnterTransition(getActivity());
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         bindViews();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        getActivity().startPostponedEnterTransition();
+                        return true;
+                    }
+                });
     }
 }

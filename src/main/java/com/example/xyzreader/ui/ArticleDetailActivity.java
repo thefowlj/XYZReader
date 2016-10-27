@@ -32,6 +32,7 @@ public class ArticleDetailActivity extends ActionBarActivity
     private long mSelectedItemId;
     private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
     private int mTopInset;
+    private int mTransitionIndex;
 
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
@@ -103,7 +104,13 @@ public class ArticleDetailActivity extends ActionBarActivity
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
                 mSelectedItemId = mStartId;
+
+                mTransitionIndex = getIntent().getIntExtra(ArticleListActivity.TRANSITION_TAG, 0);
             }
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            postponeEnterTransition();
         }
     }
 
@@ -169,7 +176,14 @@ public class ArticleDetailActivity extends ActionBarActivity
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            return ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
+
+            System.out.println("mStartId: " + mStartId);
+            System.out.println("position: " + position);
+            System.out.println("mTransitionIndex: " + mTransitionIndex);
+
+            return position == mTransitionIndex ?
+                    ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID), mTransitionIndex) :
+                    ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
         }
 
         @Override

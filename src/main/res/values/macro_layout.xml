@@ -17,4 +17,7 @@
     <dimen name="detail_metabar_title_bottom_padding">4dp</dimen>
     <dimen name="detail_body_top_margin">16dp</dimen>
     <dimen name="detail_body_bottom_margin">88dp</dimen>
+    <dimen name="collapsingTitleStartMargin">48dp</dimen>
+    <dimen name="collapsingTitleEndMargin">64dp</dimen>
+    <dimen name="detail_max_width_linear_layout_elevation">2dp</dimen>
 </resources>

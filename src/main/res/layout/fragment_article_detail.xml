@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@color/theme_primary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="@dimen/collapsingTitleStartMargin"
+            app:expandedTitleMarginEnd="@dimen/collapsingTitleEndMargin"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
@@ -67,7 +67,7 @@
         android:layout_gravity="center_horizontal"
         android:maxWidth="@dimen/detail_card_max_width"
         android:background="#fff"
-        android:elevation="2dp">
+        android:elevation="@dimen/detail_max_width_linear_layout_elevation">
 
             <LinearLayout
             android:id="@+id/meta_bar"

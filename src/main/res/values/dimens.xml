@@ -11,4 +11,10 @@
     <dimen name="appbar_max_height">112dp</dimen>
     <dimen name="toolbar_margin">8dp</dimen>
 
+    <dimen name="up_button_width">56dp</dimen>
+
+    <dimen name="photo_min_height">100dp</dimen>
+
+    <dimen name="cardview_margins">4dp</dimen>
+
 </resources>

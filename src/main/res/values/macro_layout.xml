@@ -2,7 +2,10 @@
     <!-- list -->
     <dimen name="list_side_margin">4dp</dimen>
     <dimen name="list_toolbar_side_margin">0dp</dimen>
+    <dimen name="list_title_padding">16dp</dimen>
     <integer name="list_column_count">2</integer>
+    <integer name="list_title_max_lines">4</integer>
+    <integer name="list_subtitle_max_lines">2</integer>
 
     <!-- detail -->
     <bool name="detail_is_card">false</bool>

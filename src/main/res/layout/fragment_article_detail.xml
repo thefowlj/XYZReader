@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:minHeight="100dp"/>
+                    android:minHeight="@dimen/photo_min_height"/>
 
                 <!-- View to create gradient floating on top of article image -->
                 <View

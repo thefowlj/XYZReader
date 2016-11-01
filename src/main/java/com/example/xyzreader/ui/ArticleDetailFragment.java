@@ -53,6 +53,8 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
 
+    public int mDominantColor = Utils.MUTED_DARK_COLOR_DEFAULT;
+    public int mDarkDominantColor = Utils.MUTED_DARK_COLOR_DEFAULT;
     private ImageView mPhotoView;
     private boolean mIsCard = false;
     private CoordinatorLayout mCoordinatorLayout;
@@ -61,6 +63,7 @@ public class ArticleDetailFragment extends Fragment implements
     private FloatingActionButton mFAB;
     private boolean isFABDown = false;
     private int mBottomBuffer;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     private int mTransitionIndex;
 
@@ -122,7 +125,11 @@ public class ArticleDetailFragment extends Fragment implements
 
         mCoordinatorLayout =
                 (CoordinatorLayout) mRootView.findViewById(R.id.detail_coordinator_layout);
+
         mToolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
+
+        mCollapsingToolbar =
+                (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar);
 
         mBottomBuffer = Math.round(getResources().getDimension(R.dimen.detail_body_bottom_margin));
 
@@ -162,8 +169,6 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
 
-        updateStatusBar();
-
         return mRootView;
     }
     @Override
@@ -173,21 +178,6 @@ public class ArticleDetailFragment extends Fragment implements
         //make sure the share FAB is off screen initially
         if(mFAB != null) {
             fabDown();
-        }
-    }
-
-    private void updateStatusBar() {
-
-        //If running SDK 21+ make the status bar transparent
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mCoordinatorLayout.setFitsSystemWindows(false);
-            getActivity().getWindow().setStatusBarColor(TRANSPARENT);
-            int statusBarHeight = (int) Math.round(
-                    Math.ceil(25.0 * getActivity().getResources().getDisplayMetrics().density));
-            CollapsingToolbarLayout.LayoutParams layoutParams =
-                    (CollapsingToolbarLayout.LayoutParams) mToolbar.getLayoutParams();
-            layoutParams.height += statusBarHeight;
-            mToolbar.requestLayout();
         }
     }
 
@@ -258,6 +248,8 @@ public class ArticleDetailFragment extends Fragment implements
                                 if(Color.luminance(dominantColor) > LUMINANCE_CUTOFF) {
                                     dominantColor = darkDominantColor;
                                 }
+                                mDominantColor = dominantColor;
+                                mDarkDominantColor = darkDominantColor;
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
                                         .setBackgroundColor(dominantColor);
@@ -266,6 +258,8 @@ public class ArticleDetailFragment extends Fragment implements
                                         GradientDrawable.Orientation.TOP_BOTTOM,
                                         new int[] {darkDominantColor, TRANSPARENT});
                                 gd.setCornerRadius(0);
+
+                                mCollapsingToolbar.setContentScrimColor(dominantColor);
 
                                 mRootView.findViewById(R.id.photo_gradient).setBackground(gd);
                             }
@@ -311,7 +305,7 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
-        //ActivityCompat.startPostponedEnterTransition(getActivity());
+        //updateStatusBar();
     }
 
     @Override

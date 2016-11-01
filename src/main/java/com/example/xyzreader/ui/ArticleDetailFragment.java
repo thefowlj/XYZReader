@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -16,7 +17,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
+import com.example.xyzreader.util.Utils;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
@@ -46,9 +47,8 @@ public class ArticleDetailFragment extends Fragment implements
 
     public static final String ARG_ITEM_ID = "item_id";
 
-    private static final int MUTED_COLOR = 0xFF333333;
     private static final int TRANSPARENT = 0x00;
-    private static final int PALETTE_COLOR_COUNT = 12;
+    private static final float LUMINANCE_CUTOFF = 0.5f;
 
     private Cursor mCursor;
     private long mItemId;
@@ -237,6 +237,8 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
             titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+
+            //TODO: fix this. There is no need to use this messy HTML logic
             bylineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -246,23 +248,25 @@ public class ArticleDetailFragment extends Fragment implements
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)
                             + "</font>"));
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                Palette.Builder builder = new Palette.Builder(bitmap);
-                                builder.maximumColorCount(PALETTE_COLOR_COUNT);
-                                Palette p = builder.generate();
-                                int mutedColor = p.getDarkMutedColor(MUTED_COLOR);
+                                int dominantColor = Utils.getDominantColorFromBitmap(bitmap);
+                                int darkDominantColor = Utils.darkenColor(dominantColor, Utils.DARKEN_CHANGE);
+                                if(Color.luminance(dominantColor) > LUMINANCE_CUTOFF) {
+                                    dominantColor = darkDominantColor;
+                                }
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
-                                        .setBackgroundColor(mutedColor);
+                                        .setBackgroundColor(dominantColor);
 
                                 GradientDrawable gd = new GradientDrawable(
                                         GradientDrawable.Orientation.TOP_BOTTOM,
-                                        new int[] {mutedColor, TRANSPARENT});
+                                        new int[] {darkDominantColor, TRANSPARENT});
                                 gd.setCornerRadius(0);
 
                                 mRootView.findViewById(R.id.photo_gradient).setBackground(gd);

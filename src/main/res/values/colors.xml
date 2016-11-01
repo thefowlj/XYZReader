@@ -26,6 +26,7 @@
 
     <color name="grey_500">#9E9E9E</color>
     <color name="grey_700">#616161</color>
+    <color name="grey_900">#212121</color>
 
     <color name="ltgray">#ffe0e0e0</color>
 </resources>

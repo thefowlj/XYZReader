@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.xyzreader.R;
@@ -134,19 +135,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
             final ViewHolder vh = new ViewHolder(view);
-            /*view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(
-                                    mActivity,
-                                    findViewById(R.id.photo),
-                                    getString(R.string.transition_photo) + "");
-                    startActivity(intent, options.toBundle());;
-                }
-            });*/
             return vh;
         }
 
@@ -164,9 +152,13 @@ public class ArticleListActivity extends AppCompatActivity implements
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by\n"
                             + mCursor.getString(ArticleLoader.Query.AUTHOR));
+
+            holder.thumbnailView.setViewToColorize(holder.linearLayout);
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
-                    ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
+                    ImageLoaderHelper.getInstance(ArticleListActivity.this)
+                            .getImageLoader());
+
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.thumbnailView.setTransitionName(transitionName);
@@ -199,6 +191,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         public TextView titleView;
         public TextView subtitleView;
         public View parent;
+        public LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -206,6 +199,7 @@ public class ArticleListActivity extends AppCompatActivity implements
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
             parent = view;
+            linearLayout = (LinearLayout) view.findViewById(R.id.list_item_linear_layout);
         }
     }
 }

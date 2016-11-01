@@ -10,6 +10,7 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbar_max_height"
+        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <!-- This CollapsingToolbarLayout is not here to doing any of the really amazing things

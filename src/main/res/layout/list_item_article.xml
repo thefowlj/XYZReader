@@ -9,18 +9,19 @@
     android:focusable="true"
     android:foreground="?selectableItemBackground">
 
+    <!--suppress AndroidLintContentDescription -->
+    <com.example.xyzreader.ui.DynamicHeightNetworkImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/photo_placeholder" />
+
     <LinearLayout
         android:id="@+id/list_item_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!--suppress AndroidLintContentDescription -->
-        <com.example.xyzreader.ui.DynamicHeightNetworkImageView
-            android:id="@+id/photo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/photo_min_height"
-            android:background="@color/photo_placeholder" />
+        android:orientation="vertical"
+        android:background="@color/grey_900_alpha_50">
 
         <TextView
             android:id="@+id/article_title"
@@ -31,7 +32,7 @@
             android:paddingTop="@dimen/list_title_padding"
             android:paddingRight="@dimen/list_title_padding"
             android:paddingBottom="@dimen/cardview_margins"
-            android:textColor="@color/grey_900"
+            android:textColor="@color/white"
             android:ellipsize="end"
             android:maxLines="@integer/list_title_max_lines" />
 
@@ -43,7 +44,7 @@
             android:paddingLeft="@dimen/list_title_padding"
             android:paddingRight="@dimen/list_title_padding"
             android:paddingBottom="@dimen/list_title_padding"
-            android:textColor="@color/grey_700"
+            android:textColor="@color/grey_200"
             android:maxLines="@integer/list_title_max_lines"
             android:ellipsize="end" />
     </LinearLayout>

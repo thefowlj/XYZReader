@@ -153,7 +153,6 @@ public class ArticleListActivity extends AppCompatActivity implements
                             + " by\n"
                             + mCursor.getString(ArticleLoader.Query.AUTHOR));
 
-            holder.thumbnailView.setViewToColorize(holder.linearLayout);
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this)

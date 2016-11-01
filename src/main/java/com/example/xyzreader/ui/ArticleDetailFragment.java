@@ -11,11 +11,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -56,8 +54,6 @@ public class ArticleDetailFragment extends Fragment implements
     public int mDarkDominantColor = Utils.MUTED_DARK_COLOR_DEFAULT;
     private ImageView mPhotoView;
     private boolean mIsCard = false;
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
     private NestedScrollView mNestedScrollView;
     private FloatingActionButton mFAB;
     private boolean isFABDown = false;
@@ -121,11 +117,6 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
-
-        mCoordinatorLayout =
-                (CoordinatorLayout) mRootView.findViewById(R.id.detail_coordinator_layout);
-
-        mToolbar = (Toolbar) mRootView.findViewById(R.id.toolbar);
 
         mCollapsingToolbar =
                 (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar);
@@ -304,7 +295,6 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
-        //updateStatusBar();
     }
 
     @Override

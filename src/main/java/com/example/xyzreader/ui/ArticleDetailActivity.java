@@ -30,7 +30,6 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     private long mSelectedItemId;
     private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
-    private int mTopInset;
     private int mTransitionIndex;
 
     private ViewPager mPager;
@@ -86,19 +85,6 @@ public class ArticleDetailActivity extends AppCompatActivity
             }
         });
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            mUpButtonContainer.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-//                @Override
-//                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-//                    view.onApplyWindowInsets(windowInsets);
-//                    mTopInset = windowInsets.getSystemWindowInsetTop();
-//                    mUpButtonContainer.setTranslationY(mTopInset);
-//                    updateUpButtonPosition();
-//                    return windowInsets;
-//                }
-//            });
-//        }
-
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
@@ -147,13 +133,12 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
         if (itemId == mSelectedItemId) {
-            //mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
             updateUpButtonPosition();
         }
     }
 
     private void updateUpButtonPosition() {
-        int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
+        int upButtonNormalBottom = mUpButton.getHeight();
         mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
     }
 

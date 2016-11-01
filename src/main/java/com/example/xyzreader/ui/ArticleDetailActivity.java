@@ -167,10 +167,10 @@ public class ArticleDetailActivity extends AppCompatActivity
             super.setPrimaryItem(container, position, object);
             final ArticleDetailFragment fragment = (ArticleDetailFragment) object;
             if (fragment != null) {
-                //mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
                 updateUpButtonPosition();
-                getWindow().setStatusBarColor(fragment.mDarkDominantColor);
-
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setStatusBarColor(fragment.mDarkDominantColor);
+                }
             }
         }
 

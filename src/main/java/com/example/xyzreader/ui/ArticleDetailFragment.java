@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -245,7 +244,7 @@ public class ArticleDetailFragment extends Fragment implements
                             if (bitmap != null) {
                                 int dominantColor = Utils.getDominantColorFromBitmap(bitmap);
                                 int darkDominantColor = Utils.darkenColor(dominantColor, Utils.DARKEN_CHANGE);
-                                if(Color.luminance(dominantColor) > LUMINANCE_CUTOFF) {
+                                if(Utils.luminance(dominantColor) > LUMINANCE_CUTOFF) {
                                     dominantColor = darkDominantColor;
                                 }
                                 mDominantColor = dominantColor;

@@ -2,6 +2,7 @@ package com.example.xyzreader.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.v7.graphics.Palette;
 
 /**
@@ -56,5 +57,29 @@ public class Utils {
         alpha = alpha < 0 ? 0 : alpha;
         int relativeAlpha = Math.round(alpha * maxAlpha);
         return Color.argb(relativeAlpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    /**
+     * From Android source code
+     * Copyright (C) 2006 The Android Open Source Project
+     *
+     * This method is only supported in API level 24+, but it's purely a mathematical algorithm for
+     * calculating the luminance of a color, so it has no dependencies necessary from lower APIs.
+     *
+     * Returns the relative luminance of a color.
+     * <p>
+     * Assumes sRGB encoding. Based on the formula for relative luminance
+     * defined in WCAG 2.0, W3C Recommendation 11 December 2008.
+     *
+     * @return a value between 0 (darkest black) and 1 (lightest white)
+     */
+    public static float luminance(@ColorInt int color) {
+        double red = Color.red(color) / 255.0;
+        red = red < 0.03928 ? red / 12.92 : Math.pow((red + 0.055) / 1.055, 2.4);
+        double green = Color.green(color) / 255.0;
+        green = green < 0.03928 ? green / 12.92 : Math.pow((green + 0.055) / 1.055, 2.4);
+        double blue = Color.blue(color) / 255.0;
+        blue = blue < 0.03928 ? blue / 12.92 : Math.pow((blue + 0.055) / 1.055, 2.4);
+        return (float) ((0.2126 * red) + (0.7152 * green) + (0.0722 * blue));
     }
 }

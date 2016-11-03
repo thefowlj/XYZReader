@@ -32,4 +32,5 @@
     <color name="grey_900_alpha_50">#7F212121</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
